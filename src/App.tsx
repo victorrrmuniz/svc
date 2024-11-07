@@ -1,12 +1,9 @@
 import './App.css'
+import { SVC } from './components/svc'
 
 function App() {
 
-  return (
-    <>
-      <h1>teste</h1>
-    </>
-  )
+  return (<SVC />)
 }
 
 export default App
