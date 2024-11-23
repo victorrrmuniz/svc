@@ -66,4 +66,15 @@ export const ProductCard = styled.div`
   &:hover {
     filter: brightness(1.1);
   }
+
+  div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+
+    span:nth-child(1) {
+      width: 120px;
+    }
+  }
 `

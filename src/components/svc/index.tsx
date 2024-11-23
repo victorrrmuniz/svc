@@ -23,6 +23,7 @@ export const SVC = () => {
 
   const [search, setSearch] = useState<string>('');
   const [products, setProducts] = useState<IProduct[]>([]);
+  const [allProducts, setAllProducts] = useState<IProduct[]>([]);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const baseUrl = 'http://localhost:3000';
 
@@ -32,6 +33,7 @@ export const SVC = () => {
     const fetchData = async () => {
       const response = await axios.get(baseUrl);
       setProducts(response.data);
+      setAllProducts(response.data);
     }
 
     fetchData();
@@ -40,7 +42,15 @@ export const SVC = () => {
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
 
-    setSearch(event.target.value);
+    setSearch(event.target.value)
+    const newSearch = event.target.value;
+
+    if (newSearch.length !== 0)
+      setProducts(
+        allProducts.filter(p => String(p.idProduct).includes(newSearch) || p.name.includes(newSearch) || p.caracteristicas.includes(newSearch))
+      );
+    else
+      setProducts(allProducts);
   }
 
   const handleOpenModal = () => {
@@ -48,8 +58,6 @@ export const SVC = () => {
     setOpenModal(true);
   }
    
-
-
   return (
     <MainContainer>
       <HeaderContainer className="headerContainer">
@@ -72,8 +80,18 @@ export const SVC = () => {
           {
             products.map((product, index) => (
               <ProductCard key={index} onClick={handleOpenModal}>
-                <span>{product.idProduct}</span>
-                <span>{product.name}</span>
+                <div>
+                  <span>Id:</span>
+                  <span>{product.idProduct}</span>
+                </div>
+                <div>
+                  <span>Nome:</span>
+                  <span>{product.name}</span>
+                </div>
+                <div>
+                  <span>Características:</span>
+                  <span>{product.caracteristicas}</span>
+                </div>
                 <Modal
                   open={openModal}
                   onClose={() => setOpenModal(false)}
@@ -81,7 +99,7 @@ export const SVC = () => {
                   aria-describedby="modal-modal-description"
                 >
                   <Box sx={style}>
-                    <ProductModal idProduct={product.idProduct} />
+                    <ProductModal product={product} />
                   </Box>
                 </Modal>
               </ProductCard>
